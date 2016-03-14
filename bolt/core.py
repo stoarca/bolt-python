@@ -843,7 +843,7 @@ class ContextRunner(object):
 def failed(responses):
     """Utility function that returns True if any of the responses failed."""
 
-    return any(isinstance(resp, Exception) or resp.failed for resp in responses)
+    return any(isinstance(resp, Exception) or (hasattr(resp, 'failed') and resp.failed) for resp in responses)
 
 def succeeded(responses):
     """Utility function that returns True if the responses all succeeded."""
