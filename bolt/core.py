@@ -34,6 +34,8 @@ from bolt.fabcode import (
     sudo, yellow, warn
     )
 
+from bolt import fabcode
+
 try:
     from errno import EAGAIN, EINTR, EPIPE
     from os import close, fork, kill, read, remove, write
@@ -451,7 +453,7 @@ class ContextRunner(object):
 
     def run(
         self, command, shell=True, pty=True, combine_stderr=True, dir=None,
-        format=True, warn_only=WarnOnly
+        format=True, warn_only=False
         ):
         ctx = self.ctx
         settings_list = self._settings
@@ -651,6 +653,7 @@ class ContextRunner(object):
                     idx += 1
                     write(to_child, pack('H', idx))
                 else:
+                    fabcode.CONNECTIONS = fabcode.HostConnectionCache()
                     atfork()
                     def die(*args):
                         if quiet_exit:
